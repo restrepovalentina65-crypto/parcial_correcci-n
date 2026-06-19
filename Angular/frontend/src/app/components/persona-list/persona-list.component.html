@@ -1,0 +1,71 @@
+<div class="row mb-3">
+  <div class="col">
+    <h2>Lista de Personas</h2>
+  </div>
+  <div class="col text-end">
+    <a routerLink="/personas/nueva" class="btn btn-primary">Agregar Persona</a>
+  </div>
+</div>
+
+<!-- Barra de búsqueda de diseño -->
+<div class="row mb-4">
+  <div class="col-md-6 col-sm-12">
+    <div class="input-group shadow-sm rounded">
+      <span class="input-group-text bg-white border-end-0 text-muted">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+        </svg>
+      </span>
+      <input 
+        type="text" 
+        class="form-control border-start-0 ps-1" 
+        placeholder="Buscar cliente por nombre o apellido..." 
+        [(ngModel)]="searchTerm"
+        id="inputBuscador"
+      >
+      <button 
+        *ngIf="searchTerm" 
+        class="btn btn-outline-secondary border-start-0 border-end-0 bg-white text-muted" 
+        type="button" 
+        (click)="searchTerm = ''"
+        style="z-index: 100;"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<table class="table table-striped table-hover mt-3">
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Edad</th>
+      <th>Correo</th>
+      <!-- Cabecera para Vendedor -->
+      <th>Vendedor</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let p of filteredPersonas">
+      <td>{{ p.Id }}</td>
+      <td>{{ p.Nombre }}</td>
+      <td>{{ p.Apellido }}</td>
+      <td>{{ p.Edad }}</td>
+      <td>{{ p.Correo }}</td>
+      <!-- NUEVO: Mostrar VendedorNombre o un guion si no tiene -->
+      <td>{{ p.VendedorNombre || '—' }}</td>
+      <td>
+        <a [routerLink]="['/personas/editar', p.Id]" class="btn btn-sm btn-warning me-2">Editar</a>
+        <button (click)="deletePersona(p.Id)" class="btn btn-sm btn-danger">Eliminar</button>
+      </td>
+    </tr>
+    <tr *ngIf="filteredPersonas.length === 0">
+      <!-- Ajustado colspan de 6 a 7 por la nueva columna -->
+      <td colspan="7" class="text-center">No hay personas registradas que coincidan con la búsqueda.</td>
+    </tr>
+  </tbody>
+</table>
